@@ -1,0 +1,25 @@
+version: "3.1"
+networks:
+  mysql8:
+    external: false
+services:
+  mysql:
+    #image: nacos/nacos-mysql:8.0.16
+    image: mysql:8.0.28
+    container_name: mysql8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      #- MYSQL_DATABASE=test_init
+      #- MYSQL_USER=power_env
+      #- MYSQL_PASSWORD=123456
+    command: --default-authentication-plugin=mysql_native_password # --sql-mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+    volumes:
+      - ${MIDDLEWARE_BASE_VOLUME}/mysql/data:/var/lib/mysql #挂载数据
+      - ${MIDDLEWARE_BASE_VOLUME}/mysql/conf.d:/etc/mysql/conf.d #挂载配置文件（如需）
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    networks:
+      - mysql8

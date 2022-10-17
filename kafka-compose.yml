@@ -1,0 +1,97 @@
+version: '3.7'
+
+networks:
+  kafka_net:
+    external: false
+
+services:
+
+  kafka1:
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    #container_name: kafka1
+    ports:
+      - "9093:9092"
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.kafka == kafka_group]
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: 172.16.5.27                ## 修改:宿主机IP
+      KAFKA_ADVERTISED_PORT: 9093                                 ## 修改:宿主机映射port
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.16.5.27:9093    ## 绑定发布订阅的端口。修改:宿主机IP
+      KAFKA_ZOOKEEPER_CONNECT: "172.16.5.62:2181,172.16.5.62:2182,172.16.5.62:2183"
+      
+    volumes:
+      - "./kafka/kafka1/docker.sock:/var/run/docker.sock"
+      - "./kafka/kafka1/data/:/kafka"
+    networks:
+      - kafka_net
+
+
+  kafka2:
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    #container_name: kafka2
+    ports:
+      - "9094:9092"
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.kafka == kafka_group]
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_HOST_NAME: 172.16.5.27                ## 修改:宿主机IP
+      KAFKA_ADVERTISED_PORT: 9094                               ## 修改:宿主机映射port
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.16.5.27:9094   ## 修改:宿主机IP
+      KAFKA_ZOOKEEPER_CONNECT: "172.16.5.62:2181,172.16.5.62:2182,172.16.5.62:2183"
+    volumes:
+      - "./kafka/kafka2/docker.sock:/var/run/docker.sock"
+      - "./kafka/kafka2/data/:/kafka"
+    networks:
+      - kafka_net
+
+  kafka3:
+    image: wurstmeister/kafka
+    restart: unless-stopped
+    #container_name: kafka3
+    ports:
+      - "9095:9092"
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.kafka == kafka_group]
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_HOST_NAME: 172.16.5.27             ## 修改:宿主机IP
+      KAFKA_ADVERTISED_PORT: 9095                              ## 修改:宿主机映射port
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.16.5.27:9095   ## 修改:宿主机IP
+      KAFKA_ZOOKEEPER_CONNECT: "172.16.5.62:2181,172.16.5.62:2182,172.16.5.62:2183"
+    volumes:
+      - "./kafka/kafka3/docker.sock:/var/run/docker.sock"
+      - "./kafka/kafka3/data/:/kafka"
+    networks:
+      - kafka_net
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager:latest
+    restart: unless-stopped
+    #container_name: kafka-manager
+    hostname: kafka-manager
+    ports:
+      - "9000:9000"
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.labels.kafka == kafka_group]
+    links:            # 连接本compose文件创建的container
+      - kafka1
+      - kafka2
+      - kafka3
+
+    environment:
+      ZK_HOSTS: 172.16.5.62:2181,172.16.5.62:2182,172.16.5.62:2183
+      TZ: CST-8
+    networks:
+      - kafka_net

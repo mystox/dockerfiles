@@ -1,0 +1,22 @@
+version: "3.1"
+networks:
+  jenkins:
+    external: false
+services:
+  mysql:
+    image: jenkinsci/blueocean:1.25.7
+    container_name: jenkins-blueocean
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /home/mystox/jenkins/jenkins-data/_data:/var/jenkins_home #挂载数据
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    user: "0"
+    restart: unless-stopped
+    ports:
+      - "50000:50000"
+      - "8080:8080"
+    networks:
+      - jenkins

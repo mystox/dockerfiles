@@ -1,0 +1,51 @@
+version: "3"
+networks:
+  kafka:
+    external: false #会自动创建网卡
+services:
+  kafka:
+    image: 'bitnami/kafka:2.8.1'
+    container_name: kafka
+    ports:
+      - '9092:9092'
+      - '9093:9093'
+    environment:
+      - KAFKA_BROKER_ID=99
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://127.0.0.1:9092,EXTERNAL://${HOST_IP}:9093
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=${HOST_IP}:2181
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=EXTERNAL
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_HEAP_OPTS= -Xms256m -Xmx512m
+      - KAFKA_NUM_PARTITIONS=3
+      - KAFKA_DELETE_TOPIC_ENABLE=true
+      - KAFKA_LOG_RETENTION_BYTES=67108864 #单个topic保存64M缓存
+      - KAFKA_LOG_RETENTION_HOURS=24
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ${MIDDLEWARE_BASE_VOLUME}/kafka/data:/bitnami/kafka/data
+      - ${MIDDLEWARE_BASE_VOLUME}/kafka/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - kafka
+    # extra_hosts:
+    #   - singleton.fastech.com:${HOST_IP} #配置主机ip
+  kafka-manager:
+    image: sheepkiller/kafka-manager:latest
+    restart: unless-stopped
+    container_name: kafka-manager
+    hostname: kafka-manager
+    ports:
+      - "9000:9000"
+    links:            # 连接本compose文件创建的container
+      - kafka
+    environment:
+      ZK_HOSTS: ${HOST_IP}:2181
+      TZ: CST-8
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - kafka

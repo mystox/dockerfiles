@@ -1,0 +1,32 @@
+version: "3"
+networks:
+  elasticsearch:
+    external: false
+services:
+  elasticsearch:
+    image: elasticsearch:7.5.2
+    container_name: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx512m"
+    volumes:
+      - ${MIDDLEWARE_BASE_VOLUME}/elasticsearch/data0:/usr/share/elasticsearch/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    restart: unless-stopped
+    networks:
+      - elasticsearch
+  kibana:
+    image: kibana:7.5.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      - elasticsearch

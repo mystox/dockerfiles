@@ -1,0 +1,22 @@
+version: "3.1"
+networks:
+  nexus:
+    external: false
+services:
+  nexus:
+    image: sonatype/nexus3:3.41.1
+    container_name: nexus 
+    environment:
+      - TZ=Asia/Shanghai
+      - NEXUS_CONTEXT=nexus
+    volumes:
+      - /home/mystox/docker_data/nexus3/nexus-data/:/nexus-data #挂载数据
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    user: "0"
+    restart: unless-stopped
+    ports:
+      - "8881:8081"
+    networks:
+      - nexus

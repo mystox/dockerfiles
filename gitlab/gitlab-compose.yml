@@ -1,0 +1,29 @@
+version: '3.6'
+networks:
+  gitlab:
+    external: false
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:15.3.1-ce.0'
+    restart: unless-stopped
+    hostname: '192.168.50.27'
+    container_name: 'gitlab'
+    environment:
+      # GITLAB_ROOT_PASSWORD: 123456
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://192.168.50.27:8929' #http端口
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224 #ssh端口
+        gitlab_rails['lfs_enabled'] = true #导轨
+        gitlab_rails['initial_root_password'] = "12345678"
+    ports:
+      - '8929:8929'
+      - '2224:22'
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - '$GITLAB_HOME/config:/etc/gitlab'
+      - '$GITLAB_HOME/logs:/var/log/gitlab'
+      - '$GITLAB_HOME/data:/var/opt/gitlab'
+    shm_size: '256m'
+    networks:
+      - gitlab
