@@ -6,7 +6,7 @@ networks:
 services:
   zoo1:
     image: zookeeper:3.4.14
-    restart: always
+    restart: unless-stopped
     hostname: zoo1
     ports:
       - 2181:2181
@@ -26,7 +26,7 @@ services:
 
   zoo2:
     image: zookeeper:3.4.14
-    restart: always
+    restart: unless-stopped
     hostname: zoo2
     ports:
       - 2182:2181
@@ -45,7 +45,7 @@ services:
 
   zoo3:
     image: zookeeper:3.4.14
-    restart: always
+    restart: unless-stopped
     hostname: zoo3
     ports:
       - 2183:2181
