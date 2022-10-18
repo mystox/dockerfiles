@@ -1,0 +1,19 @@
+version: '3'
+networks:
+  emqx:
+    external: false #会自动创建网卡
+services:
+  emqx:
+    image: emqx/emqx:4.3.10
+    container_name: emqx
+    environment: 
+    - EMQX_LISTENER__TCP__EXTERNAL=1883
+    ports:
+      - "18083:18083"
+      - "1883:1883"
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    restart: unless-stopped
+    networks:
+      - emqx
