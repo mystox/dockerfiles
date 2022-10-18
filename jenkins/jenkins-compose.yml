@@ -3,7 +3,7 @@ networks:
   jenkins:
     external: false
 services:
-  mysql:
+  jenkins:
     image: jenkinsci/blueocean:1.25.7
     container_name: jenkins-blueocean
     environment:
