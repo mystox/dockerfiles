@@ -5,8 +5,8 @@ docker node ls
 # docker node update --label-add role=标签名称  宿主机A节点名称
 
 docker node update --label-add zookeeper=zoo1   prod-master
-docker node update --label-add zookeeper=zoo2   prod-slaver2
-docker node update --label-add zookeeper=zoo3   prod-slaver3
+docker node update --label-add zookeeper=zoo2   prod-slaver1
+docker node update --label-add zookeeper=zoo3   prod-slaver2
 
 ```
 
