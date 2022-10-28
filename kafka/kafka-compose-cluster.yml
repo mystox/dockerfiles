@@ -1,119 +1,128 @@
 version: '3.7'
 
-
 networks:
   kafka_net:
     external: false
-
 services:
-
   kafka1:
     image: 'bitnami/kafka:2.8.1'
     restart: unless-stopped
     #container_name: kafka1
     ports:
-      - "9093:9092"
+      # - '9092:9092'
+      - '9093:9093'
     deploy:
       replicas: 1
       placement:
         constraints: [node.labels.kafka == kafka_group1]
     environment:
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_BROKER_ID: 1
-      KAFKA_CFG_ADVERTISED_HOST_NAME: dev-centos-234                ## 修改:宿主机IP
-      KAFKA_CFG_ADVERTISED_PORT: 9093                                 ## 修改:宿主机映射port
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.234:9093    ## 绑定发布订阅的端口。修改:宿主机IP
-      KAFKA_CFG_ZOOKEEPER_CONNECT: "192.168.0.234:2181,192.168.0.234:2182,192.168.0.234:2183"
-      KAFKA_CFG_NUM_PARTITIONS: 6
-      KAFKA_CFG_DELETE_TOPIC_ENABLE: "true"
-#      KAFKA_CFG_LOG_RETENTION_BYTES: 1271088640 #单个topic保存128M缓存
-      KAFKA_CFG_LOG_RETENTION_HOURS: 1
+      - KAFKA_BROKER_ID=11
+      - KAFKA_CFG_ADVERTISED_HOST_NAME=10.240.30.205           ## 修改:宿主机IP  
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093 #内网及其外网配置
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=EXTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=EXTERNAL://10.240.30.205:9093
+      - KAFKA_CFG_ADVERTISED_PORT=9093
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=10.240.30.205:2181,10.240.30.206:2181,10.240.30.207:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      # - KAFKA_HEAP_OPTS= -Xms256m -Xmx512m
+      - KAFKA_NUM_PARTITIONS=3
+      - KAFKA_DELETE_TOPIC_ENABLE=true
+      - KAFKA_LOG_RETENTION_BYTES=67108864 #单个topic保存64M缓存
+      - KAFKA_LOG_RETENTION_HOURS=24
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - "./kafka/kafka1/docker.sock:/var/run/docker.sock"
-      - "./kafka/kafka1/data/:/bitnami/kafka/data"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/middleware/kafka/data:/bitnami/kafka/data
+    user: "0"
     networks:
       - kafka_net
-
-
   kafka2:
     image: 'bitnami/kafka:2.8.1'
     restart: unless-stopped
     #container_name: kafka2
     ports:
-      - "9094:9092"
+      - '9094:9094'
     deploy:
       replicas: 1
       placement:
-        constraints: [node.labels.kafka == kafka_group1]
+        constraints: [node.labels.kafka == kafka_group2]
     environment:
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_BROKER_ID: 2
-      KAFKA_CFG_ADVERTISED_HOST_NAME: dev-centos-234                ## 修改:宿主机IP
-      KAFKA_CFG_ADVERTISED_PORT: 9094                               ## 修改:宿主机映射port
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.234:9094   ## 修改:宿主机IP
-      KAFKA_CFG_ZOOKEEPER_CONNECT: "192.168.0.234:2181,192.168.0.234:2182,192.168.0.234:2183"
-      KAFKA_CFG_DELETE_TOPIC_ENABLE: "true"
-      KAFKA_CFG_NUM_PARTITIONS: 6
- #     KAFKA_CFG_LOG_RETENTION_BYTES: 1271088640 #单个topic保存128M缓存
-      KAFKA_CFG_LOG_RETENTION_HOURS: 1
+      - KAFKA_BROKER_ID=12
+      - KAFKA_CFG_ADVERTISED_HOST_NAME=10.240.30.206           ## 修改:宿主机IP  
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:9094 #内网及其外网配置
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=EXTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=EXTERNAL://10.240.30.206:9094
+      - KAFKA_CFG_ADVERTISED_PORT=9094   
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=10.240.30.205:2181,10.240.30.206:2181,10.240.30.207:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      # - KAFKA_HEAP_OPTS= -Xms256m -Xmx512m
+      - KAFKA_NUM_PARTITIONS=3
+      - KAFKA_DELETE_TOPIC_ENABLE=true
+      - KAFKA_LOG_RETENTION_BYTES=67108864 #单个topic保存64M缓存
+      - KAFKA_LOG_RETENTION_HOURS=24
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - "./kafka/kafka2/docker.sock:/var/run/docker.sock"
-      - "./kafka/kafka2/data/:/bitnami/kafka/data"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/middleware/kafka/data:/bitnami/kafka/data
+    user: "0"
     networks:
       - kafka_net
-
   kafka3:
     image: 'bitnami/kafka:2.8.1'
     restart: unless-stopped
     #container_name: kafka3
     ports:
-      - "9095:9092"
+      - '9095:9095'
     deploy:
       replicas: 1
       placement:
-        constraints: [node.labels.kafka == kafka_group1]
+        constraints: [node.labels.kafka == kafka_group3]
     environment:
-      ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_CFG_BROKER_ID: 3
-      KAFKA_CFG_ADVERTISED_HOST_NAME: dev-centos-234             ## 修改:宿主机IP
-      KAFKA_CFG_ADVERTISED_PORT: 9095                              ## 修改:宿主机映射port
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://192.168.0.234:9095   ## 修改:宿主机IP
-      KAFKA_CFG_ZOOKEEPER_CONNECT: "192.168.0.234:2181,192.168.0.234:2182,192.168.0.234:2183"
-      KAFKA_CFG_DELETE_TOPIC_ENABLE: "true"
-      KAFKA_CFG_NUM_PARTITIONS: 6
-  #    KAFKA_CFG_LOG_RETENTION_BYTES: 1271088640 #单个topic保存128M缓存
-      KAFKA_CFG_LOG_RETENTION_HOURS: 1
+      - KAFKA_BROKER_ID=13
+      - KAFKA_CFG_ADVERTISED_HOST_NAME=10.240.30.207           ## 修改:宿主机IP   
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:9095 #内网及其外网配置
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=EXTERNAL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=EXTERNAL://10.240.30.207:9095
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=10.240.30.205:2181,10.240.30.206:2181,10.240.30.207:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      # - KAFKA_HEAP_OPTS= -Xms256m -Xmx512m
+      - KAFKA_NUM_PARTITIONS=3
+      - KAFKA_DELETE_TOPIC_ENABLE=true
+      - KAFKA_LOG_RETENTION_BYTES=67108864 #单个topic保存64M缓存
+      - KAFKA_LOG_RETENTION_HOURS=24
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - "./kafka/kafka3/docker.sock:/var/run/docker.sock"
-      - "./kafka/kafka3/data/:/bitnami/kafka/data"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/middleware/kafka/data:/bitnami/kafka/data
+    user: "0"
     networks:
       - kafka_net
 
-  kafka-manager:
-    #image: sheepkiller/kafka-manager:latest
-    image: zenko/kafka-manager:latest
-    restart: unless-stopped
-    #container_name: kafka-manager
-    hostname: kafka-manager
-    ports:
-      - "9000:9000"
-    deploy:
-      replicas: 1
-      placement:
-        constraints: [node.labels.kafka == kafka_group1]
-    links:            # 连接本compose文件创建的container
-      - kafka1
-      - kafka2
-      - kafka3
+  # kafka-manager:
+  #   #image: sheepkiller/kafka-manager:latest
+  #   image: zenko/kafka-manager:latest
+  #   restart: unless-stopped
+  #   #container_name: kafka-manager
+  #   hostname: kafka-manager
+  #   ports:
+  #     - "9000:9000"
+  #   deploy:
+  #     replicas: 1
+  #     placement:
+  #       constraints: [node.labels.kafka == kafka_group1]
+  #   links:            # 连接本compose文件创建的container
+  #     - kafka1
+  #     - kafka2
+  #     - kafka3
 
-    environment:
-      ZK_HOSTS: 192.168.0.234:2181,192.168.0.234:2182,192.168.0.234:2183
-      TZ: CST-8
-    networks:
-      - kafka_net
+  #   environment:
+  #     ZK_HOSTS: 10.240.30.205:2181,10.240.30.206:2181,10.240.30.207:2181
+  #     TZ: CST-8
+  #   networks:
+  #     - kafka_net

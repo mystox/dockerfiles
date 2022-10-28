@@ -19,4 +19,5 @@ services:
     networks:
       - nginx
     extra_hosts:
-      - singleton.tech:${HOST_IP} #配置主机ip
+      - singleton.tech:${SLAVER_HOST1} #配置主机ip
+      - slaver.tech:${SLAVER_HOST2} #配置主机ip

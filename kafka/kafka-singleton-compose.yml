@@ -26,7 +26,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ${MIDDLEWARE_BASE_VOLUME}/kafka/data:/bitnami/kafka/data
-      - ${MIDDLEWARE_BASE_VOLUME}/kafka/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
     networks:
       - kafka

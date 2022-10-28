@@ -20,6 +20,8 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - /home/middleware/zookeeper/data:/data
+      - /home/middleware/zookeeper/datalog:/datalog
     networks:
       - zookeeper_net
       
@@ -40,6 +42,8 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - /home/middleware/zookeeper/data:/data
+      - /home/middleware/zookeeper/datalog:/datalog
     networks:
       - zookeeper_net
 
@@ -59,5 +63,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+      - /home/middleware/zookeeper/data:/data
+      - /home/middleware/zookeeper/datalog:/datalog
     networks:
       - zookeeper_net
