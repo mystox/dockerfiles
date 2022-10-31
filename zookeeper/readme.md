@@ -11,6 +11,9 @@ docker node update --label-add zookeeper=zoo3   prod-slaver2
 ```
 
 2. 部署zookeeper集群
+
 ```
-docker stack deploy zookeeper --compose-file zookeeper-compose-cluster.yml
+mkdir -p /home/middleware/zookeeper/data
+mkdir -p /home/middleware/zookeeper/datalog
+docker stack deploy zookeeper -c zookeeper-compose-cluster.yml
 ```

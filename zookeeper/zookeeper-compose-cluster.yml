@@ -16,12 +16,17 @@ services:
         constraints: [node.labels.zookeeper == zoo1]
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /home/middleware/zookeeper/data:/data
       - /home/middleware/zookeeper/datalog:/datalog
+    logging:
+      driver: "json-file"
+      options:
+        max-zise: "500m"
+        max-file: "3"
     networks:
       - zookeeper_net
       
@@ -38,14 +43,20 @@ services:
         constraints: [node.labels.zookeeper == zoo2]
     environment:
       ZOO_MY_ID: 2
-      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zoo3:2888:3888
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /home/middleware/zookeeper/data:/data
       - /home/middleware/zookeeper/datalog:/datalog
+    logging:
+      driver: "json-file"
+      options:
+        max-zise: "500m"
+        max-file: "3"
     networks:
       - zookeeper_net
+      
 
   zoo3:
     image: zookeeper:3.4.14
@@ -59,11 +70,16 @@ services:
         constraints: [node.labels.zookeeper == zoo3]
     environment:
       ZOO_MY_ID: 3
-      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=0.0.0.0:2888:3888
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /home/middleware/zookeeper/data:/data
       - /home/middleware/zookeeper/datalog:/datalog
+    logging:
+      driver: "json-file"
+      options:
+        max-zise: "500m"
+        max-file: "3"
     networks:
       - zookeeper_net
