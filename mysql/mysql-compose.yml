@@ -13,6 +13,9 @@ services:
       #- MYSQL_USER=power_env
       #- MYSQL_PASSWORD=123456
     command: --default-authentication-plugin=mysql_native_password # --sql-mode=ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+    # docker安全验证
+    security_opt:
+      - seccomp:unconfined
     volumes:
       - ${MIDDLEWARE_BASE_VOLUME}/mysql/data:/var/lib/mysql #挂载数据
       - ${MIDDLEWARE_BASE_VOLUME}/mysql/conf.d:/etc/mysql/conf.d #挂载配置文件（如需）
