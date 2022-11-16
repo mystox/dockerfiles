@@ -1,0 +1,21 @@
+version: "3"
+networks:
+  filebeat:
+    external: false
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.5.1
+    container_name: filebeat
+    # environment:
+    #   - output.kafka.hosts=10.240.30.200:9093
+    #   - output.kafka.topic=filebeat.docker.logs
+    volumes:
+      - ${PWD}/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    user: "0"
+    restart: unless-stopped
+    networks:
+      - filebeat

@@ -25,7 +25,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-zise: "500m"
+        max-size: "500m"
         max-file: "3"
     networks:
       - zookeeper_net
@@ -52,7 +52,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-zise: "500m"
+        max-size: "500m"
         max-file: "3"
     networks:
       - zookeeper_net
@@ -79,7 +79,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-zise: "500m"
+        max-size: "500m"
         max-file: "3"
     networks:
       - zookeeper_net

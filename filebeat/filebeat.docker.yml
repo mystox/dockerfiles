@@ -1,0 +1,16 @@
+filebeat.config:
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+  - add_cloud_metadata: ~
+
+output.kafka:
+  hosts: ["10.240.30.205:9093","10.240.30.206:9094","10.240.30.207:9095"]
+  topic: 'filebeat.docker.logs'

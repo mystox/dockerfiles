@@ -15,5 +15,5 @@ mkdir -p /home/middleware/kafka/data
 ``` 
 3. 部署zookeeper集群
 ```
-docker stack deploy kafka --compose-file kafka-compose-cluster.yml
+docker stack deploy kafka -c kafka-compose-cluster.yml
 ```
