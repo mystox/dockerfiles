@@ -1,0 +1,14 @@
+[mysqld]
+max_connections = 200
+max_connect_errors = 200
+# 自定义函数相关
+log_bin_trust_function_creators=1
+sql_mode = STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+# binlog配置相关
+#binlog_expire_logs_seconds=604800
+binlog_expire_logs_seconds=259200
+max_binlog_size=500m
+binlog_cache_size=10m
+max_binlog_cache_size=512m
+# 不区分大小写敏感 mysql8+仅在初始化时有效
+lower_case_table_names=1
