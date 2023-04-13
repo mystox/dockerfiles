@@ -3,7 +3,7 @@ networks:
   registry:
     external: false
 services:
-  redis:
+  registry:
     image: registry:latest
     container_name: registry
     volumes:
