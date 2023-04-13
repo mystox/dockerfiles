@@ -1,0 +1,17 @@
+version: "3"
+networks:
+  registry:
+    external: false
+services:
+  redis:
+    image: registry:latest
+    container_name: registry
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ${REGISTRY_HOME}/:/var/lib/registry
+    ports:
+      - "23760:5000"
+    restart: unless-stopped
+    networks:
+      - registry
