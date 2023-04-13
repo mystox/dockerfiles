@@ -1,6 +1,6 @@
 ipcp-accept-local
 ipcp-accept-remote
-ms-dns 8.8.8.8
+ms-dns 223.5.5.5
 ms-dns 114.114.114.114
 name xl2tpd
 auth

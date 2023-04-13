@@ -53,29 +53,25 @@ EOF
 #$VPN_USER : XAUTH "$VPN_PASSWORD"
 #EOF
 
-if [ -f "/etc/ipsec.d/l2tp-secrets" ]; then
-	echo "Overwriting standard /etc/ppp/l2tp-secrets with /etc/ipsec.d/l2tp-secrets"
-	cp -f /etc/ipsec.d/l2tp-secrets /etc/ppp/l2tp-secrets
+# 外挂用户名密码到/home/xl2tp目录配置复制覆盖
+if [ -f "/home/xl2tp/chap-secrets" ]; then
+	echo "Overwriting standard /etc/ppp/chap-secrets with /home/xl2tp/chap-secrets"
+	cp -f /home/xl2tp/chap-secrets /etc/ppp/chap-secrets
 fi
-
-if [ -f "/etc/ipsec.d/ipsec.secrets" ]; then
-	echo "Overwriting standard /etc/ipsec.secrets with /etc/ipsec.d/ipsec.secrets"
-	cp -f /etc/ipsec.d/ipsec.secrets /etc/ipsec.secrets
+#同步到外挂文件
+if [ -f "/etc/ppp/chap-secrets" ]; then
+	echo "Re Overwriting mount /home/xl2tp/chap-secrets with /etc/ppp/chap-secrets"
+	cp -f /etc/ppp/chap-secrets /home/xl2tp/chap-secrets
 fi
-
-if [ -f "/etc/ipsec.d/ipsec.conf" ]; then
-	echo "Overwriting standard /etc/ipsec.conf with /etc/ipsec.d/ipsec.conf"
-	cp -f /etc/ipsec.d/ipsec.conf /etc/ipsec.conf
+# 外挂xl2tpd服務到/home/xl2tp目录配置复制覆盖
+if [ -f "/home/xl2tp/xl2tpd.conf" ]; then
+	echo "Overwriting standard /etc/xl2tpd/xl2tpd.conf with /home/xl2tp/xl2tpd.conf "
+	cp -f /home/xl2tp/xl2tpd.conf /etc/xl2tpd/xl2tpd.conf
 fi
-
-if [ -f "/etc/ipsec.d/strongswan.conf" ]; then
-	echo "Overwriting standard /etc/strongswan.conf with /etc/ipsec.d/strongswan.conf"
-	cp -f /etc/ipsec.d/strongswan.conf /etc/strongswan.conf
-fi
-
-if [ -f "/etc/ipsec.d/xl2tpd.conf" ]; then
-	echo "Overwriting standard /etc/xl2tpd/xl2tpd.conf with /etc/ipsec.d/xl2tpd.conf"
-	cp -f /etc/ipsec.d/xl2tpd.conf /etc/xl2tpd/xl2tpd.conf
+#同步到外挂文件
+if [ -f "/etc/xl2tpd/xl2tpd.conf" ]; then
+	echo "Re Overwriting mount /home/xl2tp/xl2tpd.conf with /etc/xl2tpd/xl2tpd.conf "
+	cp -f /etc/xl2tpd/xl2tpd.conf /home/xl2tp/xl2tpd.conf
 fi
 
 mkdir -p /var/run/xl2tpd
