@@ -1,0 +1,20 @@
+version: "3"
+networks:
+  xl2tpd:
+    external: false
+services:
+  xl2tpd:
+    privileged: true
+    image: cloud.mystox.tech:23760/xl2tpd-simple:1.0
+    container_name: xl2tpd
+    environment:
+      - VPN_USER=test
+      - VPN_PASSWORD=123456
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "1701:1701/udp"
+    restart: unless-stopped
+    networks:
+      - xl2tpd
