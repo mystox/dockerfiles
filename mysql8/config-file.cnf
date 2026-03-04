@@ -12,3 +12,14 @@ binlog_cache_size=10m
 max_binlog_cache_size=512m
 # 不区分大小写敏感 mysql8+仅在初始化时有效
 lower_case_table_names=1
+
+# 一些性能提升相关
+innodb_buffer_pool_size = 4G
+
+tmp_table_size = 512M                 # 内存临时表的最大大小
+max_heap_table_size = 512M            # 内存表的最大大小
+sort_buffer_size = 128M                # 排序缓冲区大小
+join_buffer_size = 128M                # 连接缓冲区大小
+read_buffer_size = 64M                # 顺序扫描缓冲区大小
+read_rnd_buffer_size = 64M            # 随机读取缓冲区大小
+group_concat_max_len = 160M           # GROUP_CONCAT 最大长度

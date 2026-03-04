@@ -1,0 +1,20 @@
+version: "2.1"
+networks:
+  openvpn:
+    external: false
+services:
+  openvpn:
+    privileged: true
+    image: kylemanna/openvpn:2.4
+    container_name: openvpn
+    cap_add:
+      - NET_ADMIN #开放宿主机内核功能
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /home/openvpn:/etc/openvpn
+    ports:
+      - "1194:1194"
+    restart: unless-stopped
+    networks:
+      - openvpn

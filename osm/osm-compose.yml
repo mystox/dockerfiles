@@ -1,0 +1,26 @@
+version: "3.6"
+networks:
+  osm-net:
+    external: false
+services:
+  neo4j:
+    image: mystox/osm:1.2
+    container_name: osm-1-2
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "OSM2PGSQL_EXTRA_ARGS=-C 4096"
+      - "PGPASSWORD=secret"
+      - "THREADS=24"
+      - DEBUG=1
+    volumes:
+      - /home/mystox/docker_data/openstreetmap-data:/var/lib/postgresql/12/main
+      - /home/mystox/dockerfiles/osm:/home/resource
+#      - /home/mystox/dockerfiles/osm/mapnik.xml:/home/renderer/src/openstreetmap-carto/mapnik.xml:rw
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "12001:80"
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - osm-net

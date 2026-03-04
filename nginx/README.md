@@ -1,0 +1,1 @@
+docker build -t my-nginx-with-upstream-check --add-host=github.com:140.82.113.4 --add-host=github.global.ssl.fastly.net:199.232.5.194  .

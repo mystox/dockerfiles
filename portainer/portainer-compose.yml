@@ -1,19 +1,16 @@
 version: "3"
 networks:
-  registry:
+  portainer:
     external: false
 services:
   registry:
-    image: registry:latest
+    image: portainer/portainer-ce:2.15.1
     container_name: registry
-#    environment:
-#      REGISTRY_HTTP_ADDR: 172.21.150.180:23761
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ${REGISTRY_HOME}/:/var/lib/registry
     ports:
-      - "23760:5000"
+      - "19000:9000"
     restart: unless-stopped
     networks:
-      - registry
+      - portainer

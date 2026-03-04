@@ -6,12 +6,12 @@ services:
   gitlab:
     image: 'gitlab/gitlab-ce:15.3.1-ce.0'
     restart: unless-stopped
-    hostname: '192.168.50.102'
+    hostname: '10.240.30.200'
     container_name: 'gitlab'
     environment:
       # GITLAB_ROOT_PASSWORD: 123456
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://cloud.mystox.tech:8929' #http端口
+        external_url 'http://10.240.30.200:8929' #http端口
         gitlab_rails['gitlab_shell_ssh_port'] = 2224 #ssh端口
         gitlab_rails['lfs_enabled'] = true #导轨
         gitlab_rails['initial_root_password'] = "12345678"
@@ -60,7 +60,7 @@ services:
         puma['max_threads'] = 2
 
         # 降低后台守护进程并发数
-        sidekiq['max_concurrency'] = 5
+        sidekiq['max_concurrency'] = 2
 
         gitlab_ci['gitlab_ci_all_broken_builds'] = false
         gitlab_ci['gitlab_ci_add_pusher'] = false
@@ -85,6 +85,11 @@ services:
       - '$GITLAB_HOME/config:/etc/gitlab'
       - '$GITLAB_HOME/logs:/var/log/gitlab'
       - '$GITLAB_HOME/data:/var/opt/gitlab'
-    shm_size: '256m'
+    shm_size: '1G'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "3"
     networks:
       - gitlab
